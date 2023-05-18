@@ -1,0 +1,2 @@
+# manly
+Pretty man pages
