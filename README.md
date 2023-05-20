@@ -25,3 +25,9 @@ enter(list)  -- open man page
 esc/q  -- close man page
 ctrl+c -- quit
 ```
+
+## ⇁ Roadmap
+- Dynamic sizing
+- Add https://cheat.sh/ integration
+- Options when querying(flag toggles for precise options, etc)
+- neovim integration(open pages in tmp neovim buffer or similar)
