@@ -14,6 +14,9 @@ go build .
 ```
 
 ## ⇁ Usage
+![main screen](https://imgur.com/95dvNn3)
+![man page](https://imgur.com/B8MmyMh)
+
 ```
 tab    -- toggle focus between input and list
 j/k    -- move up and down list
