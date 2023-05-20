@@ -55,7 +55,10 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 		case tea.KeyMsg:
 			if msg.String() == "enter" {
 			  // Need to get the actually page
-			  // Pipe in text to page?
+			  
+				page := m.list.SelectedItem().FilterValue()
+				content := querySpecificPage(page)
+			  m.page = newPage(content)
 			  m.focused = PAGE
 			}
 		}

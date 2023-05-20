@@ -52,7 +52,7 @@ func main() {
 	m := model{
 		list:    list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0),
 		input:   ti,
-		page:    newPage(),
+		page:    viewport.Model{}, // init empty page
 		focused: INPUT,
 	}
 	m.list.SetShowTitle(false)
