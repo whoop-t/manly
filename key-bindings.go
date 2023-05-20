@@ -29,17 +29,11 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 			}
 			return m, textinput.Blink
 		}
-		if msg.String() == "ctrl+j" {
+		if msg.String() == "ctrl+j" || msg.String() == "down" {
 			m.list.CursorDown()
 		}
-		if msg.String() == "ctrl+k" {
+		if msg.String() == "ctrl+k" || msg.String() == "up" {
 			m.list.CursorUp()
-		}
-		if msg.String() == "ctrl+l" {
-			m.list.Paginator.NextPage()
-		}
-		if msg.String() == "ctrl+h" {
-			m.list.Paginator.PrevPage()
 		}
 	case tea.WindowSizeMsg:
 		h, v := docStyle.GetFrameSize()
@@ -47,23 +41,18 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
-	var cmds []tea.Cmd
 	if m.focused == INPUT {
-		switch msg.(type) {
-		case debounceMsg:
-			m.list.SetItems(queryManPages(m.input.Value()))
+		switch msg := msg.(type) {
 		case tea.KeyMsg:
-			cmd = tea.Tick(debounceTimeSeconds, func(_ time.Time) tea.Msg {
-				return debounceMsg(true)
-			})
-			cmds = append(cmds, cmd)
+			if msg.String() == "enter" {
+				m.list.SetItems(queryManPages(m.input.Value()))
+				m.list.ResetSelected()
+			}
 		}
 		m.input, cmd = m.input.Update(msg)
-		cmds = append(cmds, cmd)
 	} else if m.focused == LIST {
 		m.list, cmd = m.list.Update(msg)
-		cmds = append(cmds, cmd)
 	}
 
-	return m, tea.Batch(cmds...)
+	return m, cmd
 }
