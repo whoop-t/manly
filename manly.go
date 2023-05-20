@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
+	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -26,6 +27,7 @@ const (
 type model struct {
 	list    list.Model
 	input   textinput.Model
+	page    viewport.Model
 	focused int
 }
 
@@ -50,6 +52,7 @@ func main() {
 	m := model{
 		list:    list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0),
 		input:   ti,
+		page:    newPage(),
 		focused: INPUT,
 	}
 	m.list.SetShowTitle(false)

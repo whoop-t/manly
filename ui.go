@@ -61,12 +61,16 @@ func listView(m model) string {
 }
 
 func render(m model) string {
-	return fmt.Sprintf(
-		"%s%s%s%s%s",
-		titleView(),
-		"\n",
-		inputView(m),
-		"\n\n",
-		listView(m),
-	)
+	if m.focused != PAGE {
+		return fmt.Sprintf(
+			"%s%s%s%s%s",
+			titleView(),
+			"\n",
+			inputView(m),
+			"\n\n",
+			listView(m),
+		)
+	}
+	
+	return m.page.View()
 }

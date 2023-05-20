@@ -51,7 +51,23 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 		}
 		m.input, cmd = m.input.Update(msg)
 	} else if m.focused == LIST {
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			if msg.String() == "enter" {
+			  // Need to get the actually page
+			  // Pipe in text to page?
+			  m.focused = PAGE
+			}
+		}
 		m.list, cmd = m.list.Update(msg)
+	} else if m.focused == PAGE {
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			if msg.String() == "esc" {
+			  m.focused = LIST
+			}
+		}
+		m.page, cmd = m.page.Update(msg)
 	}
 
 	return m, cmd
