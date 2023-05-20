@@ -16,6 +16,7 @@ go build .
 ## ⇁ Usage
 ![main screen](https://i.imgur.com/95dvNn3.png)
 ![man page](https://i.imgur.com/B8MmyMh.png)
+![Made with VHS](https://vhs.charm.sh/vhs-6g0TiYIBhxtctgy1Fo5JtY.gif)
 
 ```
 tab    -- toggle focus between input and list
