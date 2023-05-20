@@ -1,48 +1,35 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
-func main() {
-	p := tea.NewProgram(initialModel(), tea.WithAltScreen())
-	if _, err := p.Run(); err != nil {
-		log.Fatal(err)
-	}
+var docStyle = lipgloss.NewStyle().Margin(1, 2)
+
+type item struct {
+	title, desc string
 }
 
-type (
-	errMsg error
+func (i item) Title() string       { return i.title }
+func (i item) Description() string { return i.desc }
+func (i item) FilterValue() string { return i.title }
+
+const (
+	INPUT = 0
+	LIST  = 1
+	PAGE  = 2
 )
 
 type model struct {
-	searchInput textinput.Model
-	resultsList list.Model
-	err         error
-}
-
-func initialModel() model {
-	searchInput := textinput.New()
-	searchInput.Placeholder = "which"
-	searchInput.Focus()
-	searchInput.CharLimit = 40
-	searchInput.Width = 20
-	
-	// Init model
-	m := model{
-		resultsList:  list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0),
-		searchInput: searchInput,
-		err:         nil,
-	}
-	
-	m.resultsList.SetStatusBarItemName("man", "mans")
-	//Hide default list title + styles
-	m.resultsList.SetShowTitle(false)
-	return m
+	list    list.Model
+	input   textinput.Model
+	focused int
 }
 
 func (m model) Init() tea.Cmd {
@@ -50,28 +37,35 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmd tea.Cmd
-
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.Type {
-		case tea.KeyEnter:
-			m.resultsList.SetItems(queryManPages(m.searchInput.Value()))
-			return m, nil
-		case tea.KeyCtrlC, tea.KeyEsc:
-			return m, tea.Quit
-		}
-
-	// We handle errors just like any other message
-	case errMsg:
-		m.err = msg
-		return m, nil
-	}
-
-	m.searchInput, cmd = m.searchInput.Update(msg)
-	return m, cmd
+	return bindings(m, msg)
 }
 
 func (m model) View() string {
-	return render(m)
+	return fmt.Sprintf(
+		"%s%s",
+		m.input.View(),
+		docStyle.Render(m.list.View()),
+	)
+}
+
+func main() {
+	ti := textinput.New()
+	ti.Focus()
+	ti.Placeholder = "Pikachu"
+	ti.CharLimit = 156
+	ti.Width = 20
+	items := queryManPages("man")
+	m := model{
+		list:    list.New(items, list.NewDefaultDelegate(), 0, 0),
+		input:   ti,
+		focused: INPUT,
+	}
+	m.list.Title = "Man pages"
+
+	p := tea.NewProgram(m)
+
+	if _, err := p.Run(); err != nil {
+		fmt.Println("Error running program:", err)
+		os.Exit(1)
+	}
 }
