@@ -9,7 +9,7 @@ import (
 var focusedStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 
 const icon = "ᕙ(˘ ₃˘)ᕗ"
-const title = "Manly"
+const title = "manly"
 
 func titleView() string {
 	title := fmt.Sprintf(
@@ -30,12 +30,26 @@ func titleView() string {
 }
 
 func inputView(m model) string {
-	// Configure lipgloss styles
-	inputStyle := lipgloss.NewStyle().
+	// Configure lipgloss styles for focused and unfocused states
+	focusedStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#FFFFFF")).
 		Width(30).
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.Color("#888888"))
+
+	unfocusedStyle := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#888888")).
+		Width(30).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("#888888"))
+
+	// Determine which style to use based on focus
+	var inputStyle lipgloss.Style
+	if m.focused == INPUT {
+		inputStyle = focusedStyle
+	} else {
+		inputStyle = unfocusedStyle
+	}
 
 	// Render the input view
 	return inputStyle.Render(m.input.View())
