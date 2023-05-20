@@ -1,11 +1,19 @@
 package main
 
 import (
+	"time"
+
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
+
 var docStyle = lipgloss.NewStyle().Margin(1, 2)
+
+const debounceTimeSeconds = time.Second
+
+type debounceMsg bool
+
 func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 	// global bindings
 	switch msg := msg.(type) {
@@ -39,17 +47,23 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
+	var cmds []tea.Cmd
 	if m.focused == INPUT {
-		switch msg := msg.(type) {
+		switch msg.(type) {
+		case debounceMsg:
+			m.list.SetItems(queryManPages(m.input.Value()))
 		case tea.KeyMsg:
-			if msg.String() == "enter" {
-				m.list.SetItems(queryManPages(m.input.Value()))
-			}
+			cmd = tea.Tick(debounceTimeSeconds, func(_ time.Time) tea.Msg {
+				return debounceMsg(true)
+			})
+			cmds = append(cmds, cmd)
 		}
 		m.input, cmd = m.input.Update(msg)
+		cmds = append(cmds, cmd)
 	} else if m.focused == LIST {
 		m.list, cmd = m.list.Update(msg)
+		cmds = append(cmds, cmd)
 	}
 
-	return m, cmd
+	return m, tea.Batch(cmds...)
 }
