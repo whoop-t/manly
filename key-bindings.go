@@ -3,8 +3,9 @@ package main
 import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
-
+var docStyle = lipgloss.NewStyle().Margin(1, 2)
 func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 	// global bindings
 	switch msg := msg.(type) {

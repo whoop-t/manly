@@ -8,7 +8,7 @@ import (
 )
 
 func queryManPages(query string) []list.Item {
-	out, _ := exec.Command("man", "-k", query).Output()
+	out, _ := exec.Command("apropos", query).Output()
 	strStdout := string(out)
 	// Convert string to slice for list
 	results := strings.Split(strStdout, "\n")

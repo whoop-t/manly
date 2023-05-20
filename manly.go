@@ -7,10 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
-
-var docStyle = lipgloss.NewStyle().Margin(1, 2)
 
 type item struct {
 	title, desc string
@@ -41,28 +38,23 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	return fmt.Sprintf(
-		"%s%s",
-		m.input.View(),
-		docStyle.Render(m.list.View()),
-	)
+	// Render the view
+	return render(m)
 }
 
 func main() {
 	ti := textinput.New()
 	ti.Focus()
-	ti.Placeholder = "Pikachu"
-	ti.CharLimit = 156
-	ti.Width = 20
-	items := queryManPages("man")
+	ti.Placeholder = "e.g bash"
+	ti.CharLimit = 50
 	m := model{
-		list:    list.New(items, list.NewDefaultDelegate(), 0, 0),
+		list:    list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0),
 		input:   ti,
 		focused: INPUT,
 	}
-	m.list.Title = "Man pages"
+	m.list.SetShowTitle(false)
 
-	p := tea.NewProgram(m)
+	p := tea.NewProgram(m, tea.WithAltScreen())
 
 	if _, err := p.Run(); err != nil {
 		fmt.Println("Error running program:", err)
