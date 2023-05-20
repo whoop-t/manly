@@ -55,14 +55,18 @@ func inputView(m model) string {
 	return inputStyle.Render(m.input.View())
 }
 
+func listView(m model) string {
+	m.list.SetHeight(18)
+	return m.list.View()
+}
+
 func render(m model) string {
-	m.list.SetHeight(20)
 	return fmt.Sprintf(
 		"%s%s%s%s%s",
 		titleView(),
 		"\n",
 		inputView(m),
 		"\n\n",
-		m.list.View(),
+		listView(m),
 	)
 }
