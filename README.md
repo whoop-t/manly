@@ -20,7 +20,8 @@ go build .
 ```
 tab    -- toggle focus between input and list
 j/k    -- move up and down list
-enter  -- open man page
+enter(input) -- search
+enter(list)  -- open man page
 esc/q  -- close man page
 ctrl+c -- quit
 ```
