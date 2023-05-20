@@ -66,7 +66,7 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 	} else if m.focused == PAGE {
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
-			if msg.String() == "esc" {
+			if msg.String() == "esc" || msg.String() == "q" {
 			  m.focused = LIST
 			}
 		}

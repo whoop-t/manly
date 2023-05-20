@@ -10,9 +10,9 @@ import (
 
 
 func newPage(content string) viewport.Model {
-	const width = 78
+	const width = 90
 
-	page := viewport.New(width, 20)
+	page := viewport.New(width, 30)
 	page.Style = lipgloss.NewStyle().
 		BorderStyle(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.Color("62")).
