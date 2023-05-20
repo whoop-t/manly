@@ -14,8 +14,8 @@ go build .
 ```
 
 ## ⇁ Usage
-![main screen](https://imgur.com/95dvNn3)
-![man page](https://imgur.com/B8MmyMh)
+![main screen](https://i.imgur.com/95dvNn3.png)
+![man page](https://i.imgur.com/B8MmyMh.png)
 
 ```
 tab    -- toggle focus between input and list
