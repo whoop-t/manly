@@ -63,7 +63,7 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 			  
 				page := m.list.SelectedItem().FilterValue()
 				content := querySpecificPage(page)
-			  m.page = newPage(content)
+			  m.page = newPage(content, m)
 			  m.focused = PAGE
 			}
 		}

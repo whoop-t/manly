@@ -32,7 +32,7 @@ func titleView(m model) string {
 func inputView(m model) string {
 	// Offset specific to input
 	const widthOffset = 2
-	inputWidth := m.windowWidth / 3 - widthOffset
+	inputWidth := m.windowWidth/3 - widthOffset
 	// Configure lipgloss styles for focused and unfocused states
 	focusedStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#FFFFFF")).
@@ -65,8 +65,10 @@ func listView(m model) string {
 	return m.list.View()
 }
 
-// func calculateListHeight(m model) int {
-// }
+func pageView(m model) string {
+	m.page.Style.Width(m.windowWidth).Height(m.windowHeight)
+	return m.page.View()
+}
 
 func render(m model) string {
 	if m.focused != PAGE {
@@ -79,6 +81,6 @@ func render(m model) string {
 			listView(m),
 		)
 	}
-	
-	return m.page.View()
+
+	return pageView(m)
 }
