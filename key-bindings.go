@@ -36,6 +36,11 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 			m.list.CursorUp()
 		}
 	case tea.WindowSizeMsg:
+		// height and width of terminal is stored on model
+		// used to update components to make reponsive
+		m.windowWidth = msg.Width
+		m.windowHeight = msg.Height
+		
 		h, v := docStyle.GetFrameSize()
 		m.list.SetSize(msg.Width-h, msg.Height-v)
 	}
@@ -58,7 +63,7 @@ func bindings(m model, msg tea.Msg) (model, tea.Cmd) {
 			  
 				page := m.list.SelectedItem().FilterValue()
 				content := querySpecificPage(page)
-			  m.page = newPage(content)
+			  m.page = newPage(content, m)
 			  m.focused = PAGE
 			}
 		}

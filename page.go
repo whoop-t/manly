@@ -9,10 +9,8 @@ import (
 )
 
 
-func newPage(content string) viewport.Model {
-	const width = 90
-
-	page := viewport.New(width, 25)
+func newPage(content string, m model) viewport.Model {
+	page := viewport.New(m.windowWidth, m.windowHeight)
 	page.Style = lipgloss.NewStyle().
 		BorderStyle(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.Color("62")).
@@ -20,7 +18,7 @@ func newPage(content string) viewport.Model {
 
 	renderer, err := glamour.NewTermRenderer(
 		glamour.WithAutoStyle(),
-		glamour.WithWordWrap(width),
+		glamour.WithWordWrap(m.windowWidth),
 	)
 	if err != nil {
 		log.Fatal(err)
