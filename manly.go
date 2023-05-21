@@ -25,10 +25,12 @@ const (
 )
 
 type model struct {
-	list    list.Model
-	input   textinput.Model
-	page    viewport.Model
-	focused int
+	list         list.Model
+	input        textinput.Model
+	page         viewport.Model
+	focused      int
+	windowWidth  int
+	windowHeight int
 }
 
 func (m model) Init() tea.Cmd {
