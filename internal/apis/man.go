@@ -1,4 +1,4 @@
-package main
+package apis
 
 import (
 	"os/exec"
@@ -8,7 +8,15 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 )
 
-func queryManPages(query string) []list.Item {
+type item struct {
+	title, desc string
+}
+
+func (i item) Title() string       { return i.title }
+func (i item) Description() string { return i.desc }
+func (i item) FilterValue() string { return i.title }
+
+func QueryManPages(query string) []list.Item {
 	out, _ := exec.Command("apropos", query).Output()
 	strStdout := string(out)
 	// Convert string to slice for list
@@ -16,7 +24,7 @@ func queryManPages(query string) []list.Item {
 	return manReponseToItemList(results)
 }
 
-func querySpecificPage(page string) string {
+func QuerySpecificPage(page string) string {
 	page = stripParentheses(page)
 	out, _ := exec.Command("man", "-P", "cat", page).Output()
 	strStdout := string(out)
@@ -44,3 +52,4 @@ func manReponseToItemList(results []string) []list.Item {
 	}
 	return list
 }
+
