@@ -4,9 +4,6 @@
 ##### pretty manual pages
 </div>
 
-![manly](manly.png)
--- image from by Lisa(The video game)
-
 ## ⇁ Install
 clone
 ```bash
