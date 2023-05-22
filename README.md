@@ -24,9 +24,5 @@ esc/q  -- close man page
 ctrl+c -- quit
 ```
 
-## ⇁ Roadmap
-- File structure overhaul
-- Dynamic sizing (partially implmented)
-- Add https://cheat.sh/ integration
-- Options when querying(flag toggles for precise options, etc)
-- neovim integration(open pages in tmp neovim buffer or similar)
+## ⇁ Disclaimer
+This was a weekend project to jump start using bubbletea/golang for cli apps. More effort in to further development will most likely not happen :(
