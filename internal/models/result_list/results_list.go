@@ -73,6 +73,8 @@ func formatList(results []string) []list.Item {
 	return list
 }
 
-func (m Model) View() string {
+func (m Model) View(windowHeight int, windowWidth int) string {
+	m.List.SetHeight(windowHeight / 2)
+	m.List.SetWidth(windowWidth)
 	return m.List.View()
 }

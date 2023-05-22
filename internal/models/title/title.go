@@ -12,7 +12,7 @@ const title = "manly"
 
 // Static title
 // TODO make title look better
-func View() string {
+func View(windowHeight int, windowWidth int) string {
 	title := fmt.Sprintf(
 		"%s%s%s%s%s",
 		"\n",
@@ -26,6 +26,6 @@ func View() string {
 		Foreground(lipgloss.Color("#FAFAFA")).
 		Background(lipgloss.Color("#F25D94")).
 		PaddingLeft(4).
-		Width(32)
+		Width(windowWidth)
 	return titleStyle.Render(title)
 }

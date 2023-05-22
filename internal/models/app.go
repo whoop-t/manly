@@ -99,9 +99,9 @@ func (m model) View() string {
 		// Render the view, cascade to all children View methods
 		view = fmt.Sprintf(
 			"%s\n\n%s\n\n%s",
-			title.View(),
-			m.input.View(),
-			m.result.View(),
+			title.View(m.windowHeight, m.windowWidth),
+			m.input.View(m.windowHeight, m.windowWidth),
+			m.result.View(m.windowHeight, m.windowWidth),
 		)
 	}
 

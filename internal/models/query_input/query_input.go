@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/whoop-t/manly/internal/colors"
 )
 
 type Model struct {
@@ -39,29 +40,30 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m Model) View() string {
+func (m Model) View(windowHeight int, windowWidth int) string {
+	// Width calculated
+	width := windowWidth / 3
 	// Configure lipgloss styles for focused and unfocused states
 	focusedStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
-		Width(30).
+		Foreground(lipgloss.Color(colors.Purple)).
+		Width(width).
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.Color("#888888"))
 
-	// unfocusedStyle := lipgloss.NewStyle().
-	// 	Foreground(lipgloss.Color("#888888")).
-	// 	Width(30).
-	// 	Border(lipgloss.RoundedBorder()).
-	// 	BorderForeground(lipgloss.Color("#888888"))
+	unfocusedStyle := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#888888")).
+		Width(width).
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("#888888"))
 
 	// Determine which style to use based on focus
 	var inputStyle lipgloss.Style
-	// if m.focused == INPUT {
-	// 	inputStyle = focusedStyle
-	// } else {
-	// 	inputStyle = unfocusedStyle
-	// }
+	if m.Focused {
+		inputStyle = focusedStyle
+	} else {
+		inputStyle = unfocusedStyle
+	}
 
-	inputStyle = focusedStyle
 	// Render the input view
 	return inputStyle.Render(m.Input.View())
 }
