@@ -1,15 +1,37 @@
 package pager
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/charmbracelet/bubbles/viewport"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/glamour"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/whoop-t/manly/internal/apis"
 )
 
+type Model struct {
+	Page      viewport.Model
+	IsPageSet bool
+}
 
-func newPage(content string) viewport.Model {
+func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+	var cmd tea.Cmd
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if m.IsPageSet {
+		}
+	case apis.ShowPageMessage:
+		fmt.Println("pager stuff")
+		m.Page = NewPage(msg.Result)
+		m.IsPageSet = true
+		m.Page, cmd = m.Page.Update(msg)
+	}
+	return m, cmd
+}
+
+func NewPage(content string) viewport.Model {
 	const width = 90
 
 	page := viewport.New(width, 25)

@@ -5,6 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/whoop-t/manly/internal/apis"
+	"github.com/whoop-t/manly/internal/models/pager"
 	"github.com/whoop-t/manly/internal/models/query_input"
 	"github.com/whoop-t/manly/internal/models/result_list"
 	"github.com/whoop-t/manly/internal/models/title"
@@ -22,6 +23,10 @@ type model struct {
 	// Main result with results from queries
 	result result_list.Model
 
+	// Pager currently showing for specific result
+	pager      pager.Model
+	isPageSet bool
+
 	// Api that is being used, defaults to Man
 	api apis.Api
 
@@ -33,9 +38,9 @@ type model struct {
 // App state model constructor
 func New() model {
 	return model{
-		input: query_input.New(),
-		result:  result_list.New(),
-		api:   apis.ManApi{},
+		input:  query_input.New(),
+		result: result_list.New(),
+		api:    apis.ManApi{},
 	}
 }
 
@@ -56,12 +61,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		if msg.String() == "enter" {
 			if m.result.Focused {
-				// page := m.list.list.SelectedItem().FilterValue()
 				page := m.result.List.SelectedItem().FilterValue()
-				m.api.ShowPage(page)
+				sCmd := m.api.ShowPage(page)
+				return m, sCmd
 			} else {
-				te := m.api.GetList(m.input.Input.Value())
-				return m, te
+				glCmd := m.api.GetList(m.input.Input.Value())
+				return m, glCmd
 			}
 		}
 
@@ -76,20 +81,29 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	var a tea.Cmd
 	var b tea.Cmd
+	var c tea.Cmd
 	m.input, a = m.input.Update(msg)
 	m.result, b = m.result.Update(msg)
+	m.pager, b = m.pager.Update(msg)
 	cmds = append(cmds, a)
 	cmds = append(cmds, b)
+	cmds = append(cmds, c)
 	return m, tea.Batch(cmds...)
 }
 
 func (m model) View() string {
-	// Render the view, cascade to all children View methods
-	view := fmt.Sprintf(
-		"%s\n\n%s\n\n%s",
-		title.View(),
-		m.input.View(),
-		m.result.View(),
-	)
+	var view string
+	if m.pager.IsPageSet {
+		view = m.pager.Page.View()
+	} else {
+		// Render the view, cascade to all children View methods
+		view = fmt.Sprintf(
+			"%s\n\n%s\n\n%s",
+			title.View(),
+			m.input.View(),
+			m.result.View(),
+		)
+	}
+
 	return view
 }
