@@ -32,7 +32,6 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			}
 		}
 	case apis.ShowPageMessage:
-		fmt.Println("pager stuff")
 		m.Page = NewPage(msg.Result)
 		m.IsPageSet = true
 		m.Page, cmd = m.Page.Update(msg)
