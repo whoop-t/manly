@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	// app is main state/model, we create it here and start the program
 	m := app.New()
 
 	p := tea.NewProgram(m, tea.WithAltScreen())

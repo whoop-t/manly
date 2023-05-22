@@ -19,14 +19,19 @@ func (i item) Description() string { return i.desc }
 func (i item) FilterValue() string { return i.title }
 
 type Model struct {
-	list list.Model
+	List list.Model
+
+	// If list is focused
+	Focused bool
 }
 
 func New() Model {
 	m := Model{
-		list: list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0), // Empty list with defaults
+		List:    list.New([]list.Item{}, list.NewDefaultDelegate(), 20, 20), // Empty list with defaults
+		Focused: false,
 	}
-	m.list.SetHeight(20)
+	m.List.SetShowTitle(false)
+	m.List.SetShowHelp(false)
 	return m
 }
 
@@ -38,10 +43,17 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.String() == "enter" {
+		if m.Focused {
+			if msg.String() == "j" {
+				m.List.CursorDown()
+			}
+			if msg.String() == "k" {
+				m.List.CursorUp()
+			}
+			m.List, cmd = m.List.Update(cmd)
 		}
 	case apis.ListFetchedMessage:
-		cmd = m.list.SetItems(formatList(msg.Results))
+		cmd = m.List.SetItems(formatList(msg.Results))
 	}
 	return m, cmd
 }
@@ -62,5 +74,5 @@ func formatList(results []string) []list.Item {
 }
 
 func (m Model) View() string {
-	return m.list.View()
+	return m.List.View()
 }

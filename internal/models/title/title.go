@@ -10,7 +10,9 @@ import (
 const icon = "ᕙ(˘ ₃˘)ᕗ"
 const title = "manly"
 
-func TitleView() string {
+// Static title
+// TODO make title look better
+func View() string {
 	title := fmt.Sprintf(
 		"%s%s%s%s%s",
 		"\n",
