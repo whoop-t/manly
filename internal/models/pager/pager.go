@@ -21,6 +21,15 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if m.IsPageSet {
+			if msg.String() == "j" {
+				m.Page.LineDown(2)
+			}
+			if msg.String() == "k" {
+				m.Page.LineUp(2)
+			}
+			if msg.String() == "q" || msg.String() == "esc" {
+				m.IsPageSet = false
+			}
 		}
 	case apis.ShowPageMessage:
 		fmt.Println("pager stuff")
