@@ -28,7 +28,8 @@ ctrl+c -- quit
 ```
 
 ## ⇁ Roadmap
-- Dynamic sizing
+- File structure overhaul
+- Dynamic sizing (partially implmented)
 - Add https://cheat.sh/ integration
 - Options when querying(flag toggles for precise options, etc)
 - neovim integration(open pages in tmp neovim buffer or similar)
