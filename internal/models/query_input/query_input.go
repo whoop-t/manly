@@ -4,24 +4,40 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/whoop-t/manly/internal/apis"
 )
 
 type Model struct {
 	input textinput.Model
+	api   apis.Api
 }
 
-func Init() tea.Msg {
-  return textinput.Blink()
+func (m Model) Init() tea.Cmd {
+	return textinput.Blink
 }
 
-func New() Model {
+func New(api apis.Api) Model {
 	input := textinput.New()
 	input.Focus()
 	input.Placeholder = "e.g bash"
 	input.CharLimit = 50
 	return Model{
-	  input: input,
+		input: input,
+		api: api,
 	}
+}
+
+func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if msg.String() == "enter" {
+			te := m.api.GetList(m.input.Value())
+			return m, te
+		}
+	}
+	var cmd tea.Cmd
+	m.input, cmd = m.input.Update(msg)
+	return m, cmd
 }
 
 func (m Model) View() string {
@@ -46,7 +62,7 @@ func (m Model) View() string {
 	// 	inputStyle = unfocusedStyle
 	// }
 
-		inputStyle = focusedStyle
+	inputStyle = focusedStyle
 	// Render the input view
 	return inputStyle.Render(m.input.View())
 }
