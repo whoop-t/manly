@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/glamour"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/whoop-t/manly/internal/apis"
+	"github.com/whoop-t/manly/internal/colors"
 )
 
 type Model struct {
@@ -44,7 +45,7 @@ func NewPage(content string) viewport.Model {
 	page := viewport.New(width, 25)
 	page.Style = lipgloss.NewStyle().
 		BorderStyle(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("62")).
+		BorderForeground(lipgloss.Color(colors.Purple)).
 		PaddingRight(2)
 
 	renderer, err := glamour.NewTermRenderer(
