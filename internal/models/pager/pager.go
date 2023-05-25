@@ -12,8 +12,10 @@ import (
 )
 
 type Model struct {
-	Page      viewport.Model
-	IsPageSet bool
+	Page         viewport.Model
+	IsPageSet    bool
+	windowWidth  int
+	windowHeight int
 }
 
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
@@ -32,17 +34,21 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			}
 		}
 	case apis.ShowPageMessage:
-		m.Page = NewPage(msg.Result)
+		m.Page = NewPage(msg.Result, m.windowHeight, m.windowWidth)
 		m.IsPageSet = true
 		m.Page, cmd = m.Page.Update(msg)
+
+	case tea.WindowSizeMsg:
+		// Store window sizing
+		m.windowWidth = msg.Width
+		m.windowHeight = msg.Height
+		m.Page.Style.Height(m.windowHeight).Width(m.windowWidth)
 	}
 	return m, cmd
 }
 
-func NewPage(content string) viewport.Model {
-	const width = 90
-
-	page := viewport.New(width, 25)
+func NewPage(content string, height int, width int) viewport.Model {
+	page := viewport.New(width, height)
 	page.Style = lipgloss.NewStyle().
 		BorderStyle(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.Color(colors.Purple)).
